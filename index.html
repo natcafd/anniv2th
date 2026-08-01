@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2 Tahun Kita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Cormorant+Garamond:ital,wght@0,500;1,600&family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ====================================================================
+   BAGIAN YANG BISA LO EDIT ADA DI FILE INI, CARI TULISAN "EDIT DI SINI"
+   Semua nama, tanggal, cerita, dan surat ada di dalam <script> paling
+   bawah, di dalam const CONFIG = { ... }
+   ==================================================================== */
+
+:root{
+  --wine: #3a0d1f;
+  --wine-deep: #24081a;
+  --rose: #d1436b;
+  --rose-light: #ff8fa3;
+  --blush: #fbe6e9;
+  --cream: #fff8f4;
+  --gold: #d8b26a;
+  --ink: #3a0d1f;
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0;
+  font-family:'Poppins', sans-serif;
+  color:var(--cream);
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(216,178,106,0.10), transparent 45%),
+    radial-gradient(ellipse at 80% 20%, rgba(209,67,107,0.18), transparent 50%),
+    linear-gradient(180deg, var(--wine-deep), var(--wine) 30%, var(--wine-deep));
+  overflow-x:hidden;
+}
+
+::selection{ background:var(--rose); color:var(--cream); }
+
+h1,h2,h3{ font-family:'Playfair Display', serif; margin:0; }
+.script{ font-family:'Dancing Script', cursive; }
+
+/* ---------- Kelopak melayang (dekorasi latar) ---------- */
+.petals{ position:fixed; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
+.petal{
+  position:absolute; top:-5%;
+  width:10px; height:12px;
+  background:var(--rose-light);
+  border-radius:0 60% 0 60%;
+  opacity:.55;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  0%{ transform:translateY(-10vh) translateX(0) rotate(0deg); }
+  100%{ transform:translateY(110vh) translateX(30px) rotate(300deg); }
+}
+@media (prefers-reduced-motion: reduce){
+  .petal{ animation:none; display:none; }
+  html{ scroll-behavior:auto; }
+}
+
+/* ---------- Layar pembuka (amplop) ---------- */
+#gate{
+  position:fixed; inset:0; z-index:100;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(ellipse at center, var(--wine) 0%, var(--wine-deep) 80%);
+  transition:opacity 1s ease, visibility 1s ease;
+  padding:24px;
+}
+#gate.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+.gate-inner{ text-align:center; max-width:420px; }
+.heart-seal{
+  width:90px; height:90px; margin:0 auto 28px;
+  border:1.5px solid var(--gold);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:34px;
+  color:var(--rose-light);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.08); } }
+.gate-inner p.eyebrow{
+  letter-spacing:3px; text-transform:uppercase; font-size:11px;
+  color:var(--gold); margin-bottom:10px; font-weight:400;
+}
+.gate-inner h1{ font-size:28px; line-height:1.35; margin-bottom:8px; color:var(--cream); }
+.gate-inner .sub{ font-size:14px; color:var(--blush); opacity:.75; margin-bottom:34px; }
+#openBtn{
+  border:1px solid var(--gold);
+  background:transparent;
+  color:var(--gold);
+  padding:14px 36px;
+  font-family:'Poppins', sans-serif;
+  font-size:13px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  border-radius:100px;
+  cursor:pointer;
+  transition:.35s;
+}
+#openBtn:hover{ background:var(--gold); color:var(--wine-deep); }
+
+/* ---------- Konten utama ---------- */
+#main{ opacity:0; transition:opacity 1.2s ease; }
+#main.show{ opacity:1; }
+
+section{ padding:100px 20px; position:relative; z-index:3; }
+.wrap{ max-width:920px; margin:0 auto; }
+
+/* Hero */
+.hero{ text-align:center; padding-top:120px; }
+.hero .eyebrow{
+  letter-spacing:4px; text-transform:uppercase; font-size:12px;
+  color:var(--gold); margin-bottom:18px;
+}
+.hero h1{
+  font-size:clamp(34px,7vw,64px);
+  line-height:1.15;
+  color:var(--cream);
+}
+.hero h1 span{ color:var(--rose-light); font-family:'Dancing Script', cursive; font-size:1.25em; }
+.hero .tanggal{ margin-top:18px; color:var(--blush); opacity:.7; font-size:14px; letter-spacing:1px; }
+
+.divider{
+  width:70px; height:1px; background:var(--gold);
+  margin:36px auto; opacity:.6;
+  position:relative;
+}
+.divider::after{
+  content:'♥'; position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  background:var(--wine); padding:0 10px; color:var(--rose-light); font-size:14px;
+}
+
+/* Counter */
+.counter{
+  display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+  margin-top:10px;
+}
+.counter .box{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(216,178,106,0.25);
+  border-radius:16px;
+  padding:18px 22px;
+  min-width:88px;
+  backdrop-filter:blur(6px);
+}
+.counter .num{ font-family:'Playfair Display', serif; font-size:30px; color:var(--gold); }
+.counter .lbl{ font-size:10px; letter-spacing:2px; text-transform:uppercase; opacity:.65; margin-top:4px; }
+
+/* Section heading pattern */
+.section-head{ text-align:center; margin-bottom:56px; }
+.section-head .eyebrow{
+  letter-spacing:4px; text-transform:uppercase; font-size:11px; color:var(--gold); margin-bottom:12px;
+}
+.section-head h2{ font-size:clamp(26px,4vw,38px); color:var(--cream); }
+
+/* Timeline cards */
+.timeline{ display:flex; flex-direction:column; gap:0; }
+.tl-item{
+  display:grid; grid-template-columns:110px 1px 1fr;
+  gap:28px; padding:26px 0;
+}
+.tl-date{
+  font-family:'Cormorant Garamond', serif; font-style:italic; font-size:16px;
+  color:var(--gold); text-align:right; padding-top:6px;
+}
+.tl-line{ background:linear-gradient(var(--gold), transparent); position:relative; }
+.tl-line::before{
+  content:''; position:absolute; top:6px; left:50%; transform:translateX(-50%);
+  width:9px; height:9px; border-radius:50%; background:var(--rose-light);
+  box-shadow:0 0 0 4px rgba(255,143,163,0.18);
+}
+.tl-card{
+  background:rgba(255,248,244,0.05);
+  border:1px solid rgba(216,178,106,0.18);
+  border-radius:18px;
+  padding:22px 26px;
+  transition:.3s;
+}
+.tl-card:hover{ background:rgba(255,248,244,0.09); transform:translateX(4px); }
+.tl-card h3{ color:var(--rose-light); font-size:19px; margin-bottom:8px; }
+.tl-card p{ font-size:14px; line-height:1.75; color:var(--blush); opacity:.85; margin:0; font-weight:300; }
+
+/* Galeri kartu foto */
+.gallery{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:18px;
+}
+.photo-card{
+  aspect-ratio:4/5;
+  border-radius:18px;
+  border:1px solid rgba(216,178,106,0.25);
+  background:
+    linear-gradient(160deg, rgba(209,67,107,0.35), rgba(58,13,31,0.6)),
+    linear-gradient(45deg, var(--wine), var(--wine-deep));
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; text-align:center; padding:16px;
+  transition:.35s;
+}
+.photo-card:hover{ transform:translateY(-6px); border-color:var(--gold); }
+.photo-card .ph-icon{ font-size:26px; color:var(--rose-light); opacity:.8; }
+.photo-card .ph-txt{ font-size:12px; color:var(--blush); opacity:.6; line-height:1.5; }
+.photo-card.has-photo{ padding:0; position:relative; overflow:hidden; justify-content:flex-end; }
+.photo-card.has-photo img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+}
+.photo-card.has-photo .ph-caption{
+  position:relative; z-index:2; width:100%; padding:14px 12px;
+  background:linear-gradient(0deg, rgba(36,8,26,0.85), transparent);
+  font-size:12px; color:var(--cream); text-align:center;
+}
+
+/* Surat cinta - flip card */
+.letter-wrap{ display:flex; justify-content:center; }
+.letter{
+  width:100%; max-width:440px; height:320px;
+  perspective:1400px; cursor:pointer;
+}
+.letter-inner{
+  position:relative; width:100%; height:100%;
+  transition:transform .9s cubic-bezier(.4,.2,.2,1);
+  transform-style:preserve-3d;
+}
+.letter.open .letter-inner{ transform:rotateY(180deg); }
+.letter-face{
+  position:absolute; inset:0;
+  backface-visibility:hidden;
+  border-radius:20px;
+  border:1px solid rgba(216,178,106,0.3);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:30px; text-align:center;
+}
+.letter-front{
+  background:linear-gradient(160deg, rgba(209,67,107,0.25), rgba(36,8,26,0.9));
+}
+.letter-front .env{ font-size:38px; margin-bottom:16px; }
+.letter-front h3{ color:var(--cream); font-size:20px; margin-bottom:6px; }
+.letter-front .hint{ font-size:12px; color:var(--gold); letter-spacing:1px; margin-top:14px; }
+.letter-back{
+  background:linear-gradient(170deg, var(--cream), var(--blush));
+  color:var(--ink);
+  transform:rotateY(180deg) translateZ(0);
+  overflow:hidden;
+  align-items:stretch; justify-content:flex-start; text-align:left;
+  font-family:'Cormorant Garamond', serif;
+  padding:0;
+}
+/* Wrapper terpisah buat scroll: mencegah bug konten bocor keluar
+   kotak yang biasa terjadi saat overflow:auto digabung dgn transform 3D */
+.letter-back-scroll{
+  width:100%; height:100%;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:26px 28px;
+  transform:translateZ(0);
+}
+.letter-back .signoff{ margin-top:16px; font-family:'Dancing Script', cursive; font-size:22px; color:var(--rose); }
+.letter-back p{ font-size:17px; line-height:1.8; margin:0 0 10px; }
+.letter-back-scroll::-webkit-scrollbar{ width:5px; }
+.letter-back-scroll::-webkit-scrollbar-thumb{ background:var(--rose); border-radius:10px; }
+
+/* Form balasan -> WhatsApp */
+.reply-card{
+  max-width:520px; margin:0 auto;
+  background:rgba(255,248,244,0.05);
+  border:1px solid rgba(216,178,106,0.22);
+  border-radius:20px;
+  padding:32px 30px;
+  backdrop-filter:blur(6px);
+}
+.reply-card .rc-icon{ text-align:center; font-size:26px; margin-bottom:6px; }
+.reply-card label{
+  display:block; font-size:11px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--gold); margin:16px 0 8px;
+}
+.reply-card label:first-of-type{ margin-top:6px; }
+.reply-card input[type=text],
+.reply-card textarea{
+  width:100%; padding:12px 14px; border-radius:12px;
+  border:1px solid rgba(216,178,106,0.3);
+  background:rgba(255,255,255,0.06);
+  color:var(--cream);
+  font-family:'Poppins', sans-serif; font-size:14px;
+  resize:vertical;
+}
+.reply-card textarea{ min-height:120px; line-height:1.6; }
+.reply-card input::placeholder,
+.reply-card textarea::placeholder{ color:rgba(255,248,244,0.35); }
+.reply-card input:focus,
+.reply-card textarea:focus{ outline:none; border-color:var(--rose-light); }
+#sendReplyBtn{
+  width:100%; margin-top:22px; padding:14px;
+  border:none; border-radius:100px;
+  background:linear-gradient(120deg, var(--rose), var(--rose-light));
+  color:var(--cream); font-size:13px; letter-spacing:1.5px; text-transform:uppercase;
+  cursor:pointer; transition:.3s;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+#sendReplyBtn:hover{ filter:brightness(1.08); transform:translateY(-2px); }
+.reply-note{ text-align:center; font-size:11px; opacity:.5; margin-top:12px; }
+.reply-warn{
+  text-align:center; font-size:12px; color:var(--rose-light);
+  margin-top:12px; display:none;
+}
+.reply-warn.show{ display:block; }
+
+/* Footer */
+footer{ text-align:center; padding:80px 20px 60px; }
+footer .script{ font-size:26px; color:var(--rose-light); display:block; margin-bottom:10px; }
+footer .small{ font-size:11px; opacity:.45; letter-spacing:1px; margin-top:30px; }
+
+/* ---------- Pemutar musik ---------- */
+#musicWidget{
+  position:fixed; bottom:22px; right:22px; z-index:50;
+  display:flex; align-items:center; gap:10px;
+}
+#musicToggle{
+  width:52px; height:52px; border-radius:50%;
+  background:rgba(58,13,31,0.85);
+  border:1px solid var(--gold);
+  color:var(--gold);
+  font-size:19px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; backdrop-filter:blur(6px);
+  transition:.3s;
+}
+#musicToggle:hover{ background:var(--rose); color:var(--cream); border-color:var(--rose); }
+#musicToggle.playing{ animation:spin 6s linear infinite; }
+@keyframes spin{ from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
+#settingsToggle{
+  width:38px; height:38px; border-radius:50%;
+  background:rgba(58,13,31,0.85);
+  border:1px solid rgba(216,178,106,0.4);
+  color:var(--gold);
+  font-size:14px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+}
+
+#settingsPanel{
+  position:fixed; bottom:88px; right:22px; z-index:50;
+  width:260px;
+  background:rgba(36,8,26,0.97);
+  border:1px solid rgba(216,178,106,0.35);
+  border-radius:16px; padding:18px;
+  display:none; flex-direction:column; gap:10px;
+  font-size:12px;
+}
+#settingsPanel.show{ display:flex; }
+#settingsPanel label{ color:var(--gold); letter-spacing:1px; text-transform:uppercase; font-size:10px; }
+#settingsPanel input[type=text]{
+  width:100%; padding:9px 10px; border-radius:8px; border:1px solid rgba(216,178,106,0.3);
+  background:rgba(255,255,255,0.05); color:var(--cream); font-size:12px;
+}
+#settingsPanel input[type=file]{ font-size:11px; color:var(--blush); }
+#settingsPanel button{
+  margin-top:2px; padding:9px; border-radius:8px; border:none;
+  background:var(--rose); color:var(--cream); cursor:pointer; font-size:12px;
+}
+#settingsPanel .note{ opacity:.55; font-size:10.5px; line-height:1.5; }
+
+@media(max-width:560px){
+  section{ padding:64px 16px; }
+  .hero{ padding-top:70px; }
+  .gate-inner h1{ font-size:23px; }
+  .heart-seal{ width:74px; height:74px; font-size:28px; margin-bottom:22px; }
+  .counter{ gap:9px; }
+  .counter .box{ min-width:70px; padding:14px 12px; }
+  .counter .num{ font-size:24px; }
+  .tl-item{ grid-template-columns:70px 1px 1fr; gap:16px; padding:20px 0; }
+  .tl-date{ font-size:13px; }
+  .tl-card{ padding:18px 18px; }
+  .tl-card h3{ font-size:17px; }
+  .gallery{ grid-template-columns:repeat(2,1fr); gap:12px; }
+  .letter{ height:min(78vh, 420px); max-width:100%; }
+  .letter-back-scroll{ padding:22px 20px; }
+  .letter-back p{ font-size:15.5px; }
+  #musicWidget{ bottom:16px; right:16px; }
+  #musicToggle{ width:46px; height:46px; font-size:17px; }
+  #settingsPanel{ right:16px; left:16px; width:auto; bottom:78px; }
+  .reply-card{ padding:26px 20px; }
+}
+
+@media(max-width:360px){
+  .hero h1{ font-size:30px; }
+  .counter .box{ min-width:62px; padding:12px 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="petals" id="petals"></div>
+
+<!-- ===== Layar pembuka ===== -->
+<div id="gate">
+  <div class="gate-inner">
+    <div class="heart-seal">♥</div>
+    <p class="eyebrow">Sebuah kado kecil</p>
+    <h1 id="gateTitle">Untuk sayangkuu</h1>
+    <p class="sub"></p>
+    <button id="openBtn">Buka Hadiahnya</button>
+  </div>
+</div>
+
+<!-- ===== Konten utama ===== -->
+<div id="main">
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Dua Tahun Bersama</p>
+      <h1 id="heroTitle"></h1>
+      <p class="tanggal" id="heroTanggal"></p>
+      <div class="divider"></div>
+      <div class="counter" id="counter">
+        <div class="box"><div class="num" id="cDays">0</div><div class="lbl">Hari</div></div>
+        <div class="box"><div class="num" id="cHours">0</div><div class="lbl">Jam</div></div>
+        <div class="box"><div class="num" id="cMin">0</div><div class="lbl">Menit</div></div>
+        <div class="box"><div class="num" id="cSec">0</div><div class="lbl">Detik</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Kisah Kita</p>
+        <h2>Perjalanan yang Kita Tempuh</h2>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Kenangan</p>
+        <h2>Momen-Momen Kita</h2>
+      </div>
+      <div class="gallery" id="gallery"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Sepucuk Rasa</p>
+        <h2>Surat Untukmu</h2>
+      </div>
+      <div class="letter-wrap">
+        <div class="letter" id="letter">
+          <div class="letter-inner">
+            <div class="letter-face letter-front">
+              <div class="env">💌</div>
+              <h3>Ada surat untukmu</h3>
+              <p class="hint">Ketuk untuk membaca</p>
+            </div>
+            <div class="letter-face letter-back">
+              <div class="letter-back-scroll" id="letterBody"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Giliran Sayang</p>
+        <h2>Balas Untuk Acaaa</h2>
+      </div>
+      <div class="reply-card">
+        <div class="rc-icon">💬</div>
+        <label for="replyName">Nama Sayang (opsional)</label>
+        <input type="text" id="replyName" placeholder="Dinda Amellia">
+        <label for="replyMsg">Pesan buat acaaa</label>
+        <textarea id="replyMsg" placeholder="Tulis balasan kamu di sini..."></textarea>
+        <button id="sendReplyBtn">💌 Kirim ke WhatsApp</button>
+        <p class="reply-warn" id="replyWarn">Tulis pesannya dulu ya sayang 🥺</p>
+        <p class="reply-note">Nanti bakal kebuka WhatsApp otomatis, kamu tinggal tap kirim ya.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="script" id="footerScript">Terima kasih sudah memilih untuk tetap ada.</span>
+    <div class="divider"></div>
+    <p class="small" id="footerSmall">DIBUAT DENGAN ♥</p>
+  </footer>
+
+</div>
+
+<!-- ===== Pemutar musik ===== -->
+<audio id="bgMusic" loop></audio>
+<div id="musicWidget">
+  <div id="settingsToggle" title="Ganti musik">⚙</div>
+  <div id="musicToggle" title="Putar / jeda musik">♪</div>
+</div>
+<div id="settingsPanel">
+  <label>Tempel link musik (mp3)</label>
+  <input type="text" id="musicUrlInput" placeholder="https://...lagu.mp3">
+  <label>Atau unggah dari perangkat</label>
+  <input type="file" id="musicFileInput" accept="audio/*">
+  <button id="applyMusic">Pakai Lagu Ini</button>
+  <p class="note">Ini cuma buat coba-coba sekarang. Biar musiknya nempel permanen, edit baris MUSIK_URL di bagian CONFIG pada kode HTML-nya.</p>
+</div>
+
+<script>
+/* ====================================================================
+   EDIT DI SINI — semua isi website ada di objek CONFIG di bawah ini.
+   Ganti teksnya sesuai cerita kalian, lalu simpan filenya.
+   ==================================================================== */
+const CONFIG = {
+  namaAku: "Natca Ferez De Alta",
+  namaPasangan: "Dinda Amellia",
+
+  // Format tanggal: TAHUN-BULAN-TANGGAL, contoh jadian 1 Agustus 2024
+  tanggalJadian: "2024-08-02",
+
+  // Kalimat pembuka di layar amplop
+  gateTitle: "Untuk baby",
+
+  // Musik latar. Ganti dengan link mp3 kamu, atau upload file mp3 ke folder
+  // yang sama dengan file HTML ini lalu tulis nama filenya di sini, contoh:
+  // "lagu-kita.mp3"
+  musikUrl: "src/musik.mp3",
+
+  // Cerita perjalanan kalian, urut dari awal. Boleh nambah atau kurangin baris.
+  perjalanan: [
+    {
+      tanggal: "2 Agustus 2024",
+      judul: "Awal Mula",
+      cerita: "DORRRR, tiba tiba nembakk sayangg wwkwkk padahal belum ada apa apaa udah berani aja wkwkkw."
+    },
+    {
+      tanggal: "Beberapa bulan kemudian",
+      judul: "Belajar Bersama",
+      cerita: "ihh seringg bangett berantemm duluu (sampe sekarang sihh), tapii dengan berantemm terus semoga bisaa jadi lebih baikk yaa."
+    },
+    {
+      tanggal: "Setahun berlalu",
+      judul: "Saling Percaya",
+      cerita: "Selama setahun ini banyak yang harus ngebuat kita itu saling percayaaa, terus juga jadi pelajaran kita buat selalu saling percaya yaaa sayangggg."
+    },
+    {
+      tanggal: "Hari ini",
+      judul: "Dua Tahun",
+      cerita: "dan, sekarang udah tahun kedua kita bersama sayanggg, mau berantemm, putuss, baikann, senengg barengg, udahh kita rasainn semuaa dalemm 2 tahun ini yaa sayangg."
+    }
+  ],
+
+  // Kartu kenangan. Untuk pakai foto asli, taruh file fotonya di folder
+  // yang SAMA dengan file HTML ini, lalu isi "foto" dengan nama filenya,
+  // contoh: foto: "foto1.jpg". Kalau "foto" dikosongin (""), kartu akan
+  // menampilkan ikon placeholder seperti sekarang.
+  kenangan: [
+    { foto: "src/foto1.jpg", ikon: "🌅", teks: "Awal awal kita sering ketemu ehehe" },
+    { foto: "src/foto2.jpg", ikon: "🎂", teks: "yayyy anniv yang 1 tahun ini " },
+    { foto: "src/foto3.jpeg", ikon: "🌧️", teks: "akhirnyaaa photobooth jugaa wheheeh" },
+    { foto: "src/foto4.png", ikon: "🏖️", teks: "selamatt ulang tahunn sayanggg" }
+  ],
+
+  // Surat cinta, boleh tulis ulang sepenuhnya
+  suratCinta: [
+    "YAYYYY UDAHH 2 TAHUNN KITAAA, gakk kerasaa sumpahh tibaa tibaa udah 2 tahunn ajaa, perasaan kemarenn kemarenn seringg berantemnyaa tuhh wkwwk tiba tiba aja udah anniv yang ke 2 tahun yaaa sayangg inget gak pas anniv yang ke 1 tahun dulu, emang kali ini acaaa gak bisa kayak dulu ya ngerayain anniv kita kali ini sayanggg acaaa minta maaf ya sayangg, acaaa cuma bisa ngasih seadanyaa aja kayak ginii, sebisanyaa acaaa cuma segini buatt sayanggg gak bisa lebihh lagi acaaa, acaaa minta maaf yaa sayanggg anniv kali ini buruk buat kita sayanggg, acaa minta maaf yaa sayangg"
+  ],
+  suratTtd: "acaaaa",
+
+  // Nomor WhatsApp acaaa yang akan menerima balasan dari sayangg.
+  // Format: kode negara + nomor, TANPA tanda + dan TANPA angka 0 di depan.
+  // Contoh nomor 0812xxxxxxx jadi: "62812xxxxxxx"
+  nomorWhatsapp: "6285117146996",
+
+  footerScript: "Terima kasih sudah sama acaaa terus sayangggg",
+  footerSmall: "ANNIVERSARY 2 TAHUN"
+};
+/* ====== BATAS AKHIR BAGIAN EDIT — jangan ubah kode di bawah ini ====== */
+
+
+// ---------- Isi konten dari CONFIG ----------
+document.getElementById('gateTitle').textContent = CONFIG.gateTitle;
+document.getElementById('heroTitle').innerHTML =
+  `${CONFIG.namaAku} <span>&</span> ${CONFIG.namaPasangan}`;
+
+const tglObj = new Date(CONFIG.tanggalJadian + "T00:00:00");
+document.getElementById('heroTanggal').textContent =
+  "Bersama sejak " + tglObj.toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+
+const tlEl = document.getElementById('timeline');
+CONFIG.perjalanan.forEach(item=>{
+  const div = document.createElement('div');
+  div.className = 'tl-item';
+  div.innerHTML = `
+    <div class="tl-date">${item.tanggal}</div>
+    <div class="tl-line"></div>
+    <div class="tl-card"><h3>${item.judul}</h3><p>${item.cerita}</p></div>`;
+  tlEl.appendChild(div);
+});
+
+const galEl = document.getElementById('gallery');
+CONFIG.kenangan.forEach(item=>{
+  const div = document.createElement('div');
+  if(item.foto){
+    div.className = 'photo-card has-photo';
+    div.innerHTML = `<img src="${item.foto}" alt="${item.teks}"><div class="ph-caption">${item.teks}</div>`;
+  } else {
+    div.className = 'photo-card';
+    div.innerHTML = `<div class="ph-icon">${item.ikon}</div><div class="ph-txt">${item.teks}</div>`;
+  }
+  galEl.appendChild(div);
+});
+
+document.getElementById('letterBody').innerHTML =
+  CONFIG.suratCinta.map(p=>`<p>${p}</p>`).join('') +
+  `<div class="signoff">${CONFIG.suratTtd}</div>`;
+
+document.getElementById('footerScript').textContent = CONFIG.footerScript;
+document.getElementById('footerSmall').textContent = CONFIG.footerSmall;
+
+if(CONFIG.musikUrl){ document.getElementById('bgMusic').src = CONFIG.musikUrl; }
+
+// ---------- Kelopak melayang ----------
+const petalHost = document.getElementById('petals');
+for(let i=0;i<18;i++){
+  const p = document.createElement('div');
+  p.className = 'petal';
+  p.style.left = Math.random()*100 + 'vw';
+  p.style.animationDuration = (8 + Math.random()*10) + 's';
+  p.style.animationDelay = (Math.random()*10) + 's';
+  p.style.opacity = 0.3 + Math.random()*0.4;
+  petalHost.appendChild(p);
+}
+
+// ---------- Layar pembuka & musik ----------
+const gate = document.getElementById('gate');
+const main = document.getElementById('main');
+const music = document.getElementById('bgMusic');
+const musicToggle = document.getElementById('musicToggle');
+
+document.getElementById('openBtn').addEventListener('click', ()=>{
+  gate.classList.add('hidden');
+  main.classList.add('show');
+  if(music.src){
+    music.volume = 0.6;
+    music.play().then(()=>{ musicToggle.classList.add('playing'); }).catch(()=>{});
+  }
+});
+
+musicToggle.addEventListener('click', ()=>{
+  if(!music.src){
+    document.getElementById('settingsPanel').classList.add('show');
+    return;
+  }
+  if(music.paused){ music.play(); musicToggle.classList.add('playing'); }
+  else{ music.pause(); musicToggle.classList.remove('playing'); }
+});
+
+// ---------- Panel pengaturan musik ----------
+const settingsToggle = document.getElementById('settingsToggle');
+const settingsPanel = document.getElementById('settingsPanel');
+settingsToggle.addEventListener('click', ()=> settingsPanel.classList.toggle('show'));
+
+document.getElementById('applyMusic').addEventListener('click', ()=>{
+  const url = document.getElementById('musicUrlInput').value.trim();
+  const file = document.getElementById('musicFileInput').files[0];
+  if(file){
+    music.src = URL.createObjectURL(file);
+  } else if(url){
+    music.src = url;
+  } else {
+    return;
+  }
+  music.volume = 0.6;
+  music.play().then(()=>{ musicToggle.classList.add('playing'); }).catch(()=>{});
+  settingsPanel.classList.remove('show');
+});
+
+// ---------- Surat cinta (flip) ----------
+document.getElementById('letter').addEventListener('click', function(){
+  this.classList.toggle('open');
+});
+
+// ---------- Kirim balasan ke WhatsApp ----------
+document.getElementById('sendReplyBtn').addEventListener('click', ()=>{
+  const nama = document.getElementById('replyName').value.trim();
+  const pesan = document.getElementById('replyMsg').value.trim();
+  const warn = document.getElementById('replyWarn');
+
+  if(!pesan){
+    warn.classList.add('show');
+    return;
+  }
+  warn.classList.remove('show');
+
+  const pengirim = nama || CONFIG.namaPasangan;
+  const teksLengkap =
+    `Halo ${CONFIG.namaAku}, ini balasan dari ${pengirim} buat website anniversary kita:\n\n"${pesan}"`;
+
+  const nomor = (CONFIG.nomorWhatsapp || '').replace(/\D/g,'');
+  const url = `https://wa.me/${nomor}?text=${encodeURIComponent(teksLengkap)}`;
+  window.open(url, '_blank');
+});
+
+// ---------- Hitung mundur / hitung maju waktu bersama ----------
+function updateCounter(){
+  const now = new Date();
+  let diff = now - tglObj;
+  if(diff < 0) diff = 0;
+  const days = Math.floor(diff/(1000*60*60*24));
+  const hours = Math.floor((diff/(1000*60*60))%24);
+  const mins = Math.floor((diff/(1000*60))%60);
+  const secs = Math.floor((diff/1000)%60);
+  document.getElementById('cDays').textContent = days;
+  document.getElementById('cHours').textContent = String(hours).padStart(2,'0');
+  document.getElementById('cMin').textContent = String(mins).padStart(2,'0');
+  document.getElementById('cSec').textContent = String(secs).padStart(2,'0');
+}
+updateCounter();
+setInterval(updateCounter, 1000);
+</script>
+</body>
+</html>
